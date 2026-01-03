@@ -1,0 +1,25 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Only need basic dependencies - no Azure SDK!
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install only the Python packages we need (no Azure SDK!)
+RUN pip install --no-cache-dir \
+    fastapi==0.104.1 \
+    uvicorn[standard]==0.24.0 \
+    pydantic==2.5.0 \
+    requests==2.31.0
+
+# Copy the REST API server
+COPY azure_tts_rest.py .
+
+# Expose port
+EXPOSE 5003
+
+# Run the server
+CMD ["python", "azure_tts_rest.py"]
