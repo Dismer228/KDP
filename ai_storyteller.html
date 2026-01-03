@@ -404,8 +404,12 @@
         
         // Initialize
         window.addEventListener('load', async () => {
-            await initializeMicrophone();
-            loadSettings();
+        await initializeMicrophone();
+        loadSettings();
+        updateModelDisplay();
+    
+        // Add event listener for model selection
+        document.getElementById('aiModelSelect').addEventListener('change', updateModelDisplay);
         });
         
         async function initializeMicrophone() {
@@ -440,6 +444,14 @@
             if (savedApiKey) document.getElementById('apiKey').value = savedApiKey;
             if (savedModel) document.getElementById('aiModelSelect').value = savedModel;
             if (savedPrompt) document.getElementById('storyPrompt').value = savedPrompt;
+        }
+
+        function updateModelDisplay() {
+        const modelSelect = document.getElementById('aiModelSelect');
+        const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+        const displayText = selectedOption.textContent;
+    
+        document.getElementById('aiModel').textContent = displayText;
         }
         
         function saveSettings() {
